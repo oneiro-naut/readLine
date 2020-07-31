@@ -1,7 +1,4 @@
 #include "readline.h"
-#include "execute.h"
-#include "stack.h"
-#include "w_env.h"
 #include <stdio.h>
 
 
@@ -180,8 +177,8 @@ char *readLine() {
     }
     else if(c==CTRL_KEY('l'))
     {
-      char* clear[]={"/usr/bin/clear",NULL};
-      exec_w(clear[0],clear);
+      // char* clear[]={"/usr/bin/clear",NULL};
+      // exec_w(clear[0],clear);
       return buf.b;
     }
     else if (c == KEY_ENTER) {
@@ -206,42 +203,42 @@ char *readLine() {
         }
 
     else if (c == ARROW_UP) {
-      if(prevStringLength!=0 && hist <= HISTSTACK.top){
-        hist++;
-      if(hist>0){
-        for(itr=0;itr<prevStringLength;itr++){
-          deletechar(&buf);
-        }
-        tempChar =printI(&HISTSTACK, hist);
-        prevStringLength = strlen(tempChar);
-        for(itr=0;itr<prevStringLength;itr++){
-          insertchar(&buf,tempChar[itr]);
-        }
-      }
-    }
+      // if(prevStringLength!=0 && hist <= HISTSTACK.top){
+      //   hist++;
+      // if(hist>0){
+      //   for(itr=0;itr<prevStringLength;itr++){
+      //     deletechar(&buf);
+      //   }
+      //   tempChar =printI(&HISTSTACK, hist);
+      //   prevStringLength = strlen(tempChar);
+      //   for(itr=0;itr<prevStringLength;itr++){
+      //     insertchar(&buf,tempChar[itr]);
+      //   }
+      // }
+    //}
 
     }
 
     else if (c == ARROW_DOWN) {
-      if(prevStringLength!=0 && hist>=0){
-      hist--;
-      if(hist>0){
-      for(itr=0;itr<prevStringLength;itr++){
-          deletechar(&buf);
-        }
-        tempChar =printI(&HISTSTACK, hist);
-        prevStringLength = strlen(tempChar);
-        for(itr=0;itr<prevStringLength;itr++){ //noice 
-          insertchar(&buf,tempChar[itr]);
-        }
-      }
-      else if(hist==0)//experimental
-      {
-        for(itr=0;itr<prevStringLength;itr++){
-          deletechar(&buf);
-        }
-        }
-      } 
+      // if(prevStringLength!=0 && hist>=0){
+      // hist--;
+      // if(hist>0){
+      // for(itr=0;itr<prevStringLength;itr++){
+      //     deletechar(&buf);
+      //   }
+      //   tempChar =printI(&HISTSTACK, hist);
+      //   prevStringLength = strlen(tempChar);
+      //   for(itr=0;itr<prevStringLength;itr++){ //noice 
+      //     insertchar(&buf,tempChar[itr]);
+      //   }
+      // }
+      // else if(hist==0)//experimental
+      // {
+      //   for(itr=0;itr<prevStringLength;itr++){
+      //     deletechar(&buf);
+      //   }
+      //}
+      //} 
     }
 
     //else if(CTRL_KEY(c)=='\x5e'){putchar('^');putchar('C');putchar('\n'); return buf.b; }
