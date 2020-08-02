@@ -88,13 +88,22 @@ int main() {
     printBufferInfo(testBuffer);
     printBuffer(testBuffer);
 
-    //buffer shift test
-
-    //buffer attach head buffer test
-
-    //buffer attach tail buffer test
-
     //detach buffer test
+    struct buffer* chuck = detachBuffer(4, 5, &testBuffer); // creates a detached buffer "Chuck"
+    printBufferInfo(testBuffer); 
+    printBuffer(testBuffer); // lets see it still prints RIP Chuck! ...fixed shiftBufferBackward
+    printBufferInfo(chuck);//segfault occured at this line...ya becoz there was no return statement lol
+    printBuffer(chuck);// prints "Chuck" as expected
+
+
+    //merge buffers test
+    testBuffer = mergeBuffers(&testBuffer, &chuck);//it works but can cause troubles
+    printBufferInfo(testBuffer);
+    printBuffer(testBuffer);
+
+    
+
+
     
     return 0;
 }

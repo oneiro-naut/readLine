@@ -19,6 +19,7 @@ struct buffer* allocateBuffer(size_t size) {
 // more like isBufferNull()
 int isBufferEmpty(struct buffer* b){
 
+    if(b == NULL)return -1;
     if(b->buf == NULL)return 1;
     else return 0;
 
@@ -26,6 +27,7 @@ int isBufferEmpty(struct buffer* b){
 
 int isBufferFull(struct buffer* b){
 
+    if(b == NULL)return -1;
     if(b->cur_size == b->size) return 1;
     else return 0;
 
@@ -33,6 +35,9 @@ int isBufferFull(struct buffer* b){
 
 void reallocateBuffer(struct buffer** b, size_t newsize) {
 
+    if(*b == NULL) {
+        *b = allocateBuffer(newsize);
+    } 
     (*b)->buf = (char*) realloc((*b)->buf,sizeof(char) * newsize);
     (*b)->size = newsize;
 }
@@ -41,18 +46,21 @@ void reallocateBuffer(struct buffer** b, size_t newsize) {
 // splicing operation basically buffer size decreases due to reallocation
 struct buffer* detachBuffer(int start, size_t size, struct buffer** b) {
 
+    if(*b == NULL) return NULL;
     struct buffer* sub = allocateBuffer(size);
     int i;
     for(i = 0; i < size; i++) { 
-        sub->buf[i] = (*b)->buf[start + i];
+        appendCharToBuffer(&sub, (*b)->buf[start + i]);
     }
-
     shiftBufferBackward(b, start + size, size);
-
+    return sub; // lol
 
 }
 
 struct buffer* mergeBuffers(struct buffer** l, struct buffer** r) {
+    if(*l == NULL) return *r;
+    if(*r == NULL) return *l;
+    
     int lsize = (*l)->size;
     int rsize = (*r)->size;
     int newsize = (*l)->cur_size + (*r)->cur_size;
@@ -76,9 +84,7 @@ struct buffer* mergeBuffers(struct buffer** l, struct buffer** r) {
 
 void shiftBufferBackward(struct buffer** b,int start, int shift) {
 
-    if((*b)->size < (*b)->cur_size + shift) {
-        return;
-    }
+    if(*b == NULL) return;
     int i;
     for(i = start; i < (*b)->cur_size; i++) {
         (*b)->buf[i - shift] = (*b)->buf[i];
