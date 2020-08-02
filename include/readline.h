@@ -7,7 +7,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include "input.h"
-#include "buffer.h"
+#include "lrbuffer.h"
 
 static struct termios term, oterm;
 static struct lrbuffer* readline_buffer;
@@ -19,7 +19,7 @@ void exitreadLine();
 char* readLine();
 
 static void clearLine();
-static void insertChar();
+static void insertChar(char c);
 static void deleteChar();
 static void moveCursorForward();
 static void moveCursorBackward();

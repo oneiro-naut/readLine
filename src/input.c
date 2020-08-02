@@ -1,6 +1,6 @@
 #include "input.h"
 
-static int getChar(char* c) { // returns immediate char hit to c
+int getChar(char* c) { // returns immediate char hit to c
     int ret = 0;
 
     ret = getchar();//tcsanow == apply change immediately
@@ -12,10 +12,10 @@ static int getChar(char* c) { // returns immediate char hit to c
 
 
 
-static int parseKey() {
+int parseKey() {
   int nread;
   char c=0;
-  nread=getChar(&c,1,0);
+  nread=getChar(&c);
   if(nread==-1)return nread;
 
   if (c == KEY_ESCAPE) {

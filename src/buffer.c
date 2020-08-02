@@ -160,6 +160,13 @@ void freeBuffer(struct buffer** b) {
     *b = NULL; //indication that free succeded
 }
 
+void putBuffer(struct buffer* b) {
+    int i;
+    for(i = 0; i < b->cur_size; i++) {
+        putchar(b->buf[i]);
+    }
+}
+
 //for debugging
 void printBuffer(struct buffer* b) {
     int i;

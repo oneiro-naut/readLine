@@ -23,8 +23,8 @@ struct lrbuffer {
 
 //LRBuffer functions
 struct lrbuffer* bufferCreate(char* data);
-void bufferCursorForward(struct lrbuffer** lrb);
-void bufferCursorBackward(struct lrbuffer** lrb);
+void bufferCursorIncrement(struct lrbuffer** lrb);
+void bufferCursorDecrement(struct lrbuffer** lrb);
 void bufferInsertChar(struct lrbuffer** lrb, char c);
 void bufferDelChar(struct lrbuffer** lrb);
 void bufferRepartition(struct lrbuffer** lrb);
@@ -32,5 +32,8 @@ void bufferPrint(struct lrbuffer* lrb);
 char* bufferToString(struct lrbuffer* lrb);
 void bufferClear(struct lrbuffer** lrb);
 void bufferFree(struct lrbuffer** lrb);
+
+//debugging functions
+void bufferPrintInfo(struct lrbuffer* lrb);
 
 #endif

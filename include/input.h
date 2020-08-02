@@ -23,8 +23,8 @@ enum editorKey {
   PAGE_DOWN
 };
 
-static int getChar(char* c);
-static int parseKey();
+int getChar(char* c);
+int parseKey();
 
 
 

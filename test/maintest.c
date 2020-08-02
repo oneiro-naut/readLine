@@ -3,7 +3,8 @@
 
 int main(){
     //passing max buffersize allowed init is necessary before you use any of readLine functions
-    initreadLine(10000);
+    initreadLine(); // enter raw-mode
     readLine();
+    exitreadLine(); // must call this else your shell won't work (will have to close your terminal emulator)
     return 0;
 }

@@ -27,6 +27,7 @@ void attachTailBuffer(struct buffer** b, struct buffer** tail);
 void attachHeadBuffer(struct buffer** b, struct buffer** head);
 //void copyBuffer(struct buffer** src, struct buffer** dest); //overwrites dest completely
 struct buffer* stringToBuffer(const char* str); // converts C string literal to buffer
+void putBuffer(struct buffer* b);
 
 //debugging functions
 void printBuffer(struct buffer* b);

@@ -1,9 +1,9 @@
 #include "readline.h"
-
+#include <string.h>
 
 
 static void insertChar(char c) {
-  bufferInsertChar(&readline_buffer);
+  bufferInsertChar(&readline_buffer, c);
 }
 
 static void deleteChar() {
@@ -17,8 +17,8 @@ void initreadLine() {
   //modifying the copy 
   term.c_lflag &= ~(ICANON | ECHO);//turn off echo(char type wont be printed to term) and canonical mode(line by line read mode) to raw mode(byte by byte read mode)
   //term.c_lflag &= ~(ICANON );
-  term.c_cc[VMIN] = 0;//min number bytes to be read before read returns it is 1 B here 
-  term.c_cc[VTIME] = 1;//read timeout after which it returns
+  term.c_cc[VMIN] = 1;//min number bytes to be read before read returns it is 1 B here 
+  term.c_cc[VTIME] = 0;//read timeout after which it returns
   tcsetattr(0, TCSANOW, &term);//setting new config using our modified term config struct
   //but we wont reset the modification now
   //reset will be done using exitreadLine function
@@ -26,7 +26,7 @@ void initreadLine() {
 
 void exitreadLine() {
   tcsetattr(0, TCSANOW, &oterm); //turn off raw mode and switch back to cannonical mode
-  freeBuffer(&readline_buffer);
+  //freeBuffer(&readline_buffer);
 
 }
 
@@ -38,7 +38,6 @@ char* readLine() {
     //can be caused by unsuccessful read due to terminated read syscall 
     //which might have because of any interrupt(say SIGTERM)
     if(c==-1) {
-      exitreadLine();
       return NULL; 
     } 
     
@@ -52,21 +51,21 @@ char* readLine() {
     } 
     else if(c==CTRL_KEY('d') ) {
       putchar('\n');
-      exitreadLine();
       return NULL;
     }
     else if(c==CTRL_KEY('l')) {
-      clearLine();
+      //clearLine();
       return NULL;
     }
     else if (c == KEY_ENTER) {
-      return bufferToString(readline_buffer);
+      return NULL;
     } 
     else if (c == ARROW_LEFT) {
-          moveCursorForward();
+          bufferCursorDecrement(&readline_buffer);
     } 
     else if (c == ARROW_RIGHT) {
-          moveCursorBackward();
+          
+          bufferCursorIncrement(&readline_buffer);
     }
     else if (c == ARROW_UP) {
     }
