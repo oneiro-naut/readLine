@@ -31,6 +31,7 @@ void exitreadLine() {
 }
 
 char* readLine() {
+  char* toReturn = NULL;
   //  printf("crazY prompt>>");
   while (1) {
 
@@ -58,7 +59,10 @@ char* readLine() {
       return NULL;
     }
     else if (c == KEY_ENTER) {
-      return NULL;
+      putchar('\n'); // I am in doubt
+      toReturn = bufferToString(readline_buffer);
+      bufferFree(&readline_buffer);
+      return toReturn;
     } 
     else if (c == ARROW_LEFT) {
           bufferCursorDecrement(&readline_buffer);

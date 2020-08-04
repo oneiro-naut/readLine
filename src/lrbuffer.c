@@ -26,9 +26,10 @@ void bufferDelChar(struct lrbuffer** lrb) {
     int i;
     bufferRepartition(lrb);
     if(*lrb)deleteCharFromBuffer(&(*lrb)->lbuf);
-    (*lrb)->cursor_pos--;
-    cursorforward((*lrb)->rbuf->cur_size);
-    for(i = 0; i <= (*lrb)->rbuf->cur_size; i++)backspc();
+    if((*lrb)->cursor_pos > 0)(*lrb)->cursor_pos--;
+    if((*lrb)->rbuf->cur_size > 0)cursorforward((*lrb)->rbuf->cur_size);
+    for(i = 0; i < (*lrb)->rbuf->cur_size; i++)backspc();
+    backspc();
     putBuffer((*lrb)->rbuf);
     if((*lrb)->rbuf->cur_size > 0)cursorbackward((*lrb)->rbuf->cur_size );
 
@@ -51,8 +52,10 @@ void bufferInsertChar(struct lrbuffer** lrb, char c) {
 
 
 void bufferCursorIncrement(struct lrbuffer** lrb) {
-    (*lrb)->cursor_pos++;
-    cursorforward(1);
+    if((*lrb)->lbuf->cur_size + (*lrb)->rbuf->cur_size > (*lrb)->cursor_pos){
+        (*lrb)->cursor_pos++;
+        cursorforward(1);
+    }
 }
 
 
@@ -83,5 +86,33 @@ void bufferPrintInfo(struct lrbuffer* lrb) {
     printf("RBuffer:\n");
     printBufferInfo(lrb->rbuf);
     printf("Cursor position: %d\n",lrb->cursor_pos);
+
+}
+
+char* bufferToString(struct lrbuffer* lrb) {
+    if(!lrb)return NULL;
+
+    int str_size = lrb->lbuf->cur_size + lrb->rbuf->cur_size + 1;
+    char* str = (char*) malloc(sizeof(char)*str_size); // +1 for null char
+    
+    int i;
+    for(i = 0; i < lrb->lbuf->cur_size; i++) {
+        str[i] = lrb->lbuf->buf[i];
+    }
+    for(i = 0; i < lrb->rbuf->cur_size; i++) {
+        str[lrb->lbuf->cur_size + i] = lrb->rbuf->buf[i];
+    }
+    str[lrb->lbuf->cur_size + i] = 0; // null char termination of  string
+
+    return str;
+
+}
+
+void bufferFree(struct lrbuffer** lrb) {
+    if(!*lrb)return;
+
+    freeBuffer(&(*lrb)->lbuf);
+    freeBuffer(&(*lrb)->rbuf);
+
 
 }

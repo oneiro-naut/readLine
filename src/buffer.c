@@ -155,6 +155,7 @@ void deleteCharFromBuffer(struct buffer** b) {
 }
 
 void freeBuffer(struct buffer** b) {
+    if(!*b)return;
     free((*b)->buf);
     free(*b);
     *b = NULL; //indication that free succeded
@@ -191,4 +192,16 @@ struct buffer* stringToBuffer(const char* str) {
     }
 
     return strbuf;
+}
+
+char* stringBuffer(struct buffer* b) { //wont actually use it
+    if(!b)return NULL;
+    char* str = (char*) malloc(sizeof(char)*(b->cur_size + 1));
+    int i;
+    for(i = 0; i < b->cur_size; i++) {
+        str[i] = b->buf[i];
+    }
+    str[i] = 0; //null char terminated c string
+
+    return str;
 }

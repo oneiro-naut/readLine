@@ -32,6 +32,7 @@ void bufferPrint(struct lrbuffer* lrb);
 char* bufferToString(struct lrbuffer* lrb);
 void bufferClear(struct lrbuffer** lrb);
 void bufferFree(struct lrbuffer** lrb);
+char* bufferToString(struct lrbuffer* lrb);
 
 //debugging functions
 void bufferPrintInfo(struct lrbuffer* lrb);
