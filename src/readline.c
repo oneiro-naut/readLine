@@ -1,7 +1,7 @@
 #include "readline.h"
 #include <string.h>
 
-
+struct termios term, oterm;
 static void insertChar(char c) {
   bufferInsertChar(&readline_buffer, c);
 }
@@ -26,11 +26,12 @@ void initreadLine() {
 
 void exitreadLine() {
   tcsetattr(0, TCSANOW, &oterm); //turn off raw mode and switch back to cannonical mode
-  //freeBuffer(&readline_buffer);
+  bufferFree(&readline_buffer);
 
 }
 
 char* readLine() {
+  initreadLine();//enter raw-mode 
   char* toReturn = NULL;
   //  printf("crazY prompt>>");
   while (1) {
@@ -52,17 +53,19 @@ char* readLine() {
     } 
     else if(c==CTRL_KEY('d') ) {
       putchar('\n');
-      return NULL;
+      //return NULL;
+      break;
     }
     else if(c==CTRL_KEY('l')) {
       //clearLine();
-      return NULL;
+      //return NULL;
+      break;
     }
     else if (c == KEY_ENTER) {
       putchar('\n'); // I am in doubt
       toReturn = bufferToString(readline_buffer);
-      bufferFree(&readline_buffer);
-      return toReturn;
+      //return toReturn;
+      break;
     } 
     else if (c == ARROW_LEFT) {
           bufferCursorDecrement(&readline_buffer);
@@ -82,6 +85,10 @@ char* readLine() {
 
     
   }
+
+  exitreadLine();//exit raw-mode
+  return toReturn;
+
 }
 
 

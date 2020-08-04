@@ -9,7 +9,7 @@
 #include "input.h"
 #include "lrbuffer.h"
 
-static struct termios term, oterm;
+extern struct termios term, oterm;
 static struct lrbuffer* readline_buffer;
 
 
