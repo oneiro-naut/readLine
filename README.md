@@ -24,10 +24,11 @@ $make
 $sudo make install
 ```
 **Note:** You can do a user-only installation as well. For that you will need to edit the Makefile and add prefix of your own choice.  
-          In that case steps will be:
+          In that case steps will be:  
           ```
-          $make
-          $make install
+          $make  
+          $make install  
+          
           ```
 
 ### Example usage:  
