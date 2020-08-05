@@ -30,6 +30,7 @@ $make
 $make install
 ```
 ### Example usage:  
+test.c:  
 ```c
 #include <readline.h>  
 
@@ -37,6 +38,10 @@ int main() {
   char* user-input = readLine();  
   return 0;  
 }  
-```
+```  
+Compile it and run:  
+```$gcc -o test test.c -lreadLine```  
+```$./test```  
+
 ### To Be Added:  
 1. Auto-completion of user input based of input history.  
