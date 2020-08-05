@@ -19,18 +19,16 @@ Time-complexity of an insertion or deletion right after changing the cursor posi
 ### Installation:  
 Makefile is used for library installation. Default prefix is /usr/local/lib/ (it will be a system-wide installation)   
 To install readLine run the following commands:
-```
+```  
 $make
 $sudo make install
 ```
-**Note:** You can do a user-only installation as well. For that you will need to edit the Makefile and add prefix of your own choice.  
-          In that case steps will be:  
-          ```
-          $make  
-          $make install  
-          
-          ```
+**Note:** You can do a user-only installation as well. For that you will need to edit the Makefile and add prefix of your own choice. In that case steps will be:  
 
+```  
+$make
+$make install
+```
 ### Example usage:  
 ```c
 #include <readline.h>  
