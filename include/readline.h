@@ -16,7 +16,7 @@ static struct lrbuffer* readline_buffer;
 void initreadLine();
 void exitreadLine();
 
-char* readLine();
+extern char* readLine();
 
 static void clearLine();
 static void insertChar(char c);
