@@ -8,7 +8,7 @@ This repository provides the readLine functionality for handling newline termina
 2. Handles cursor movement.  
 3. User can edit the input using deletion and insertion operations.  
 4. The utility tracks user input history.  
-5. User can navigate through the previously types commands using up and down arrow keys.  
+5. User can navigate through the previously typed input using up and down arrow keys.  
 
 
 ### Implementation details:
@@ -16,8 +16,7 @@ Input is stored using a **LRBuffer** data structure(rather than a simple 1D dyan
 Time-comlexity of continuous character **insertion** and **deletion** operation(without manual cursor changes in between) is of the order **O(1)**.  
 Time-complexity of an insertion or deletion right after changing the cursor position is of the order **O(n)**.  
 
-### Installation:  
-
+### Installation:  (to be added)  
 
 ### Example usage:  
 ```c
