@@ -32,7 +32,7 @@ $make install
 ### Example usage:  
 test.c:  
 ```c
-#include <readline.h>  
+#include <readLine/readline.h>  
 
 int main() {  
   char* user-input = readLine();  
