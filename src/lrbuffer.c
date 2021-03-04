@@ -1,5 +1,6 @@
 #include "lrbuffer.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 struct lrbuffer* bufferCreate(char* data) {
     struct lrbuffer* lrb = (struct lrbuffer*) malloc(sizeof(struct lrbuffer));
@@ -60,8 +61,10 @@ void bufferCursorIncrement(struct lrbuffer** lrb) {
 
 
 void bufferCursorDecrement(struct lrbuffer** lrb) {
-    (*lrb)->cursor_pos--;
-    cursorbackward(1);
+    if ((*lrb)->cursor_pos > 0) {
+        (*lrb)->cursor_pos -= 1;
+        cursorbackward(1);
+    }
 }
 
 void bufferRepartition(struct lrbuffer** lrb) {
