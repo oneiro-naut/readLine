@@ -11,7 +11,7 @@
 
 extern struct termios term, oterm;
 static struct lrbuffer* readline_buffer;
-
+const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
 
 void initreadLine();
 void exitreadLine();

@@ -57,7 +57,7 @@ char* readLine() {
       break;
     }
     else if(c==CTRL_KEY('l')) {
-      //clearLine();
+      write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12); //lets C
       //return NULL;
       break;
     }
