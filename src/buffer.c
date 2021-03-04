@@ -40,6 +40,7 @@ void reallocateBuffer(struct buffer** b, size_t newsize) {
     } 
     (*b)->buf = (char*) realloc((*b)->buf,sizeof(char) * newsize);
     (*b)->size = newsize;
+
 }
 
 
@@ -48,8 +49,7 @@ struct buffer* detachBuffer(int start, size_t size, struct buffer** b) {
 
     if(*b == NULL) return NULL;
     struct buffer* sub = allocateBuffer(size);
-    int i;
-    for(i = 0; i < size; i++) { 
+    for(int i = 0; i < size; i++) { 
         appendCharToBuffer(&sub, (*b)->buf[start + i]);
     }
     shiftBufferBackward(b, start + size, size);
@@ -136,8 +136,9 @@ void appendCharToBuffer(struct buffer** b, char c) {
         reallocateBuffer(b, (*b)->size * 2); //double the size
     }
 
-    (*b)->buf[(*b)->cur_size] = c;
     (*b)->cur_size++;
+    (*b)->buf[(*b)->cur_size - 1] = c;
+    
 
 }
 
@@ -162,8 +163,9 @@ void freeBuffer(struct buffer** b) {
 }
 
 void putBuffer(struct buffer* b) {
-    int i;
-    for(i = 0; i < b->cur_size; i++) {
+    if (!b)
+        return;
+    for(int i = 0; i < b->cur_size; i++) {
         putchar(b->buf[i]);
     }
 }

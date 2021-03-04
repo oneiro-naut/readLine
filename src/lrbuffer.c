@@ -24,16 +24,16 @@ void bufferDelChar(struct lrbuffer** lrb) {
         //*lrb = bufferCreate(NULL);
         return;
     }
-    int i;
     bufferRepartition(lrb);
     if(*lrb)deleteCharFromBuffer(&(*lrb)->lbuf);
-    if((*lrb)->cursor_pos > 0)(*lrb)->cursor_pos--;
-    if((*lrb)->rbuf->cur_size > 0)cursorforward((*lrb)->rbuf->cur_size);
-    for(i = 0; i < (*lrb)->rbuf->cur_size; i++)backspc();
-    backspc();
-    putBuffer((*lrb)->rbuf);
-    if((*lrb)->rbuf->cur_size > 0)cursorbackward((*lrb)->rbuf->cur_size );
-
+    if ((*lrb)->cursor_pos > 0) {
+        (*lrb)->cursor_pos--;
+        if((*lrb)->rbuf->cur_size > 0)cursorforward((*lrb)->rbuf->cur_size);
+        for (int i = 0; i < (*lrb)->rbuf->cur_size + 1; ++i)
+            backspc();
+        putBuffer((*lrb)->rbuf);
+        if((*lrb)->rbuf->cur_size > 0)cursorbackward((*lrb)->rbuf->cur_size );
+    }
 }
 
 void bufferInsertChar(struct lrbuffer** lrb, char c) {
@@ -72,10 +72,10 @@ void bufferRepartition(struct lrbuffer** lrb) {
     struct buffer* temp = NULL;
     int cursor_shift = (*lrb)->cursor_pos - (*lrb)->lbuf->cur_size;
     if(cursor_shift < 0) { // lbuf will shrink rbuf will grow
-        temp = detachBuffer((*lrb)->cursor_pos, -1 * cursor_shift, &(*lrb)->lbuf ); //malloc is called inside this function
+        temp = detachBuffer((*lrb)->cursor_pos, (*lrb)->lbuf->cur_size - (*lrb)->cursor_pos, &(*lrb)->lbuf ); //malloc is called inside this function
         (*lrb)->rbuf = mergeBuffers(&temp, &(*lrb)->rbuf); // free is called inside this function
     } else if (cursor_shift > 0) {
-        temp = detachBuffer(0, (*lrb)->cursor_pos - (*lrb)->rbuf->cur_size, &(*lrb)->rbuf);
+        temp = detachBuffer(0, (*lrb)->cursor_pos - (*lrb)->lbuf->cur_size, &(*lrb)->rbuf);
         (*lrb)->lbuf = mergeBuffers(&(*lrb)->lbuf, &temp);
     } else {
         return;
