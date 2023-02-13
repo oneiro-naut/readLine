@@ -1,7 +1,19 @@
 #include "readline.h"
 #include <string.h>
+#include <stdint.h>
 
 struct termios term, oterm;
+struct sigaction rdl_sig;
+uint8_t rdl_sigint_flag;
+
+void rdl_sighandler(int sig_num)
+{
+  if (sig_num == SIGINT)
+  {
+    rdl_sigint_flag = 1;
+  }
+}
+
 static void insertChar(char c) {
   bufferInsertChar(&readline_buffer, c);
 }
@@ -11,6 +23,12 @@ static void deleteChar() {
 }
 
 void initreadLine() {
+  //setting up signal handler
+  rdl_sigint_flag = 0;
+  memset(&rdl_sig, 0, sizeof(rdl_sig));
+  rdl_sig.sa_handler = rdl_sighandler;
+  rdl_sig.sa_flags = 0; //not SA_RESTART
+  sigaction(SIGINT,  &rdl_sig, 0);//should work only for parent process 
   readline_buffer = bufferCreate(NULL);
   tcgetattr(0, &oterm);//original term config struct= oterm here
   memcpy(&term, &oterm, sizeof(term));//copying that to term struct
@@ -40,9 +58,15 @@ char* readLine() {
     //can be caused by unsuccessful read due to terminated read syscall 
     //which might have because of any interrupt(say SIGTERM)
     if(c==-1) {
-      return NULL; 
+      if (rdl_sigint_flag)
+      {
+        rdl_sigint_flag = 1;
+        putchar('^');
+        putchar('C');
+        putchar('\n');
+      }
+      break;
     } 
-    
     //***when ctrl c or ctrl z is pressed getchar will return -1 that is it got interrupted by sigint or something 
     // this behaviour is by default set to restarting the syscall that is restarting the get char 
     //can be turned off by setting sa_flag =0 which is  by default set to SA_RESTART***this is some serious OS concept**more to learn
@@ -57,7 +81,7 @@ char* readLine() {
       break;
     }
     else if(c==CTRL_KEY('l')) {
-      write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12); //lets C
+      write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 11); //lets C
       //return NULL;
       break;
     }
@@ -82,8 +106,6 @@ char* readLine() {
       insertChar(c);
       //basically overwriting to replace with true insertion
     }
-
-    
   }
 
   exitreadLine();//exit raw-mode

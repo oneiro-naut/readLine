@@ -1,34 +1,49 @@
-IDIR =include
-CC=gcc
-CFLAGS=-I$(IDIR)
-
-CDIR=src
-BDIR=build/debug
-ODIR=src
 #PREFIX is environment variable, but if it is not set, then set default value
 ifeq ($(PREFIX),)
     PREFIX := /usr/local
 endif
-DEPS = $(wildcard $(IDIR)/*.h)
 
-SRC = $(wildcard $(CDIR)/*.c)
+INCDIR =./include
+CC=gcc
+LD=gcc
+INCFLAGS=-I$(INCDIR)
+CFLAGS=-std=gnu99 -fPIC
 
-readline: $(SRC)
-	mkdir -p $(BDIR)
-	$(CC) -g -c $^ $(CFLAGS)
-	ar rcs $(BDIR)/libreadLine.a *.o
-	ar -t $(BDIR)/libreadLine.a
-	rm *.o
-	$(CC) -g -fPIC -c $^ $(CFLAGS)
-	$(CC) -shared -o $(BDIR)/libreadLine.so *.o
-	rm *.o
+SRCDIR=./src
+OBJDIR=./obj
+LIBDIR =./lib
 
-install: $(BDIR)/libreadLine.a $(BDIR)/libreadLine.so
+LIBS=
+
+SRCS = $(wildcard $(SRCDIR)/*.c)
+HEADERS= $(wildcard $(INCDIR)/*.h)
+OBJLIST = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+SRCLIST=
+
+readline: $(LIBDIR)/libreadLine.a $(LIBDIR)/libreadLine.so
+
+$(LIBDIR)/libreadLine.a: $(OBJLIST)
+	mkdir -p $(LIBDIR)
+	ar rcs $@ $^
+	ar -t $@
+
+$(LIBDIR)/libreadLine.so: $(OBJLIST)
+	mkdir -p $(LIBDIR)
+	$(CC) -shared $^ -o $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	mkdir -p $(OBJDIR)
+	$(CC) -g $(CFLAGS) $(INCFLAGS) -c $^ -o $@
+
+clean:
+	rm lib/* obj/*
+
+install: $(LIBDIR)/libreadLine.a $(LIBDIR)/libreadLine.so
 	install -d $(PREFIX)/lib/
-	install -m 644 $(BDIR)/libreadLine.so $(PREFIX)/lib/
-	install -m 644 $(BDIR)/libreadLine.a $(PREFIX)/lib/
+	install -m 644 $(LIBDIR)/libreadLine.so $(PREFIX)/lib/
+	install -m 644 $(LIBDIR)/libreadLine.a $(PREFIX)/lib/
 	install -d $(PREFIX)/include/readLine
-	install -m 644 $(DEPS) $(PREFIX)/include/readLine
+	install -m 644 $(HEADERS) $(PREFIX)/include/readLine
 	echo "/usr/local/lib" > /etc/ld.so.conf.d/local.conf
 	ldconfig
-	
+
