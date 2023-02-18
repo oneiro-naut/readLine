@@ -51,7 +51,6 @@ void exitreadLine() {
 char* readLine() {
   initreadLine();//enter raw-mode 
   char* toReturn = NULL;
-  //  printf("crazY prompt>>");
   while (1) {
 
     int c = parseKey();
@@ -76,19 +75,16 @@ char* readLine() {
       deleteChar();
     } 
     else if(c==CTRL_KEY('d') ) {
-      putchar('\n');
-      //return NULL;
-      break;
+      exitreadLine(); //exit raw-mode
+      return "\4";
     }
     else if(c==CTRL_KEY('l')) {
       write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 11); //lets C
-      //return NULL;
       break;
     }
     else if (c == KEY_ENTER) {
       putchar('\n'); // I am in doubt
       toReturn = bufferToString(readline_buffer);
-      //return toReturn;
       break;
     } 
     else if (c == ARROW_LEFT) {
@@ -110,8 +106,5 @@ char* readLine() {
 
   exitreadLine();//exit raw-mode
   return toReturn;
-
 }
-
-
 
