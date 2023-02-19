@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "input.h"
 
 int getChar(char* c) { // returns immediate char hit to c

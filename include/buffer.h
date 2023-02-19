@@ -4,12 +4,12 @@
 #include <stddef.h>
 
 //basically a dynamic array (Dyanamic String precisely)
-struct buffer {
+struct buffer
+{
     char* buf;
     size_t size;
     size_t cur_size;
 };
-
 
 //Buffer(dynamic array) functions
 struct buffer* allocateBuffer(size_t size);
@@ -33,4 +33,5 @@ void putBuffer(struct buffer* b);
 //debugging functions
 void printBuffer(struct buffer* b);
 void printBufferInfo(struct buffer* b);
-#endif
+#endif //BUFFER_H
+

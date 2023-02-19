@@ -1,10 +1,28 @@
-#include "readline.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 #include <string.h>
 #include <stdint.h>
+#include <termios.h>
+#include <unistd.h>
+#include <signal.h>
+#include <errno.h>
+#include "readline.h"
+#include "lrbuffer.h"
+#include "input.h"
 
-struct termios term, oterm;
-struct sigaction rdl_sig;
-uint8_t rdl_sigint_flag;
+const char* CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
+
+static struct termios term, oterm;
+static struct sigaction rdl_sig;
+static uint8_t rdl_sigint_flag;
+
+static struct lrbuffer* readline_buffer;
+static void clearLine();
+static void insertChar(char c);
+static void deleteChar();
+static void moveCursorForward();
+static void moveCursorBackward();
 
 void rdl_sighandler(int sig_num)
 {
